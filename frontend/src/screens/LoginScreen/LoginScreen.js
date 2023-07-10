@@ -5,58 +5,41 @@ import "./LoginScreen.css"
 import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Loading from '../../components/Header/Loading';
 import ErrorMessage from '../../components/ErrorMessage';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux"
+import { login } from '../../actions/userAction';
 
 
-const LoginScreen = ( ) => {
+const LoginScreen = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(false);
-    const [loading, setLoading] = useState(false);
+
     let navigate = useNavigate();
 
+    const dispatch = useDispatch();
+
+    const userLogin = useSelector(state => state.userLogin);
+
+    const { loading, error, userInfo } = userLogin;
+
+
     useEffect(() => {
-        const userInfo = localStorage.getItem("userInfo");
-    
         if (userInfo) {
-          navigate("/mynotes");
+            navigate("/mynotes");
         }
-      });
+    });
 
 
     const submitHandler = async (event) => {
         event.preventDefault();
         console.log(email, password);
-
-
-        try {
-            const config = {
-                headers: {
-                    "Content-type": "application/json"
-                }
-            }
-
-            setLoading(true);
-
-            const { data } = await axios.post(
-                '/api/users/login',
-                {
-                    email, password,
-                },
-                config
-            );
-            console.log(data);
-            localStorage.setItem("userInfo", JSON.stringify(data));
-            setLoading(false);
-        } catch (error) {
-            setError(error.response.data.message)
-            setLoading(false)
-        }
+        dispatch(login(email, password));
     }
+
+
     return (
         <>
             <MainScreen title="Login">

@@ -2,10 +2,13 @@ import { Form } from "react-bootstrap";
 import MainScreen from "../../components/MainScreen";
 import { Button, Row, Col } from "react-bootstrap";
 import { Link } from 'react-router-dom';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ErrorMessage from "../../components/ErrorMessage";
-import axios from "axios";
 import Loading from "../../components/Header/Loading";
+import { useDispatch, useSelector } from 'react-redux'
+import { register } from "../../actions/userAction";
+import { useNavigate } from 'react-router-dom';
+
 
 
 const RegisterScreen = () => {
@@ -15,8 +18,20 @@ const RegisterScreen = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState(null);
-    const [error, setError] = useState(false);
-    const [loading, setLoading] = useState(false);
+    let navigate = useNavigate();
+
+
+    const dispatch = useDispatch();
+
+    const userRegister = useSelector(state => state.userRegister);
+    const { loading, error, userInfo } = userRegister;
+
+    useEffect(() => {
+
+        if (userInfo) {
+            navigate("/mynotes");
+        }
+    });
 
     const submitHandler = async (event) => {
         event.preventDefault();
@@ -24,32 +39,12 @@ const RegisterScreen = () => {
         if (password !== confirmPassword) {
             setMessage("Passwords do not match");
         } else {
-            setMessage(null);
-            try {
-                const config = {
-                    headers: {
-                        "Content-type": "application/json",
-                    },
-                };
-
-                setLoading(true)
-
-                const { data } = await axios.post(
-                    "/api/users",
-                    { name, email, password },
-                    config
-                );
-
-                setLoading(false);
-                localStorage.setItem("userInfo", JSON.stringify(data));
-
-            } catch (error) {
-                setError(error.response.data.message)
-            }
+            dispatch(register(name, email, password))
 
         }
-        console.log(email);
     }
+    console.log(email);
+
 
     return (
         <MainScreen title='Register'>
