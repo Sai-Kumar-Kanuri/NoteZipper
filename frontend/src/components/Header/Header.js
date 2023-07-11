@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../../actions/userAction';
 
 
-const Header = () => {
+const Header = ({ setSearch }) => {
     let navigate = useNavigate();
     const dispatch = useDispatch()
     const userLogin = useSelector(state => state.userLogin)
@@ -18,6 +18,8 @@ const Header = () => {
         dispatch(logout());
         navigate("/")
     }
+
+    console.log(userInfo);
 
     return (
         <Navbar expand="lg" bg="primary" variant="dark">
@@ -28,26 +30,32 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav className='m-auto'>
+
                         <Form >
                             <Form.Control
                                 type="search"
                                 placeholder="Search"
                                 className="me-2"
                                 aria-label="Search"
+                                onChange={(e) => setSearch(e.target.value)}
                             />
                         </Form>
                     </Nav>
                     <Nav>
-                        <Nav.Link href='/mynotes'>
-                            My Notes
-                        </Nav.Link>
-                        <NavDropdown title="Sai Kumar Kanuri" id="navbarScrollingDropdown">
-                            <NavDropdown.Item href="#action3">My Profile</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item onClick={logoutHandler}>
-                                Log Out
-                            </NavDropdown.Item>
-                        </NavDropdown>
+                        {userInfo ? (<>
+                            <Nav.Link href='/mynotes'>
+                                My Notes
+                            </Nav.Link>
+                            <NavDropdown title={userInfo?.name} id="navbarScrollingDropdown">
+                                <NavDropdown.Item href="/profile">My Profile</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item onClick={logoutHandler}>
+                                    Log Out
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                        </>) : (
+                            <Nav.Link href="/login">Login</Nav.Link>
+                        )}
 
                     </Nav>
 

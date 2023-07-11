@@ -2,9 +2,34 @@ import { Accordion, Badge, Button, Card } from "react-bootstrap";
 import { useAccordionButton } from "react-bootstrap/AccordionButton";
 import MainScreen from "../../components/MainScreen";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios"
-const MyNotes = () => {
+import { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteNoteAction, listNotes } from "../../actions/notesActions";
+import Loading from "../../components/Header/Loading";
+import ErrorMessage from "../../components/ErrorMessage";
+import { useNavigate } from 'react-router-dom';
+
+
+
+const MyNotes = ({ search }) => {
+    let navigate = useNavigate();
+
+    const dispatch = useDispatch();
+
+    const noteList = useSelector(state => state.noteList);
+    const { loading, notes, error } = noteList;
+
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
+
+    const noteCreate = useSelector((state) => state.noteCreate);
+    const { success: successCreate } = noteCreate;
+
+    const noteUpdate = useSelector((state) => state.noteUpdate);
+    const { success: successUpdate } = noteUpdate;
+
+    const noteDelete = useSelector((state) => state.noteDelete);
+    const { success: successDelete } = noteDelete;
 
     function CustomToggle({ children, eventKey }) {
         const decoratedOnClick = useAccordionButton(eventKey, () =>
@@ -22,39 +47,43 @@ const MyNotes = () => {
         );
     }
 
-    const [notes,setNotes]=useState([])
+    // const [notes, setNotes] = useState([])
 
     const deleteHandler = (id) => {
         if (window.confirm("Are You Sure?")) {
-
+            dispatch(deleteNoteAction(id));
         }
     }
 
-    const fetchNotes = async () => {
-        const { data } = await axios.get('/api/notes');
-        setNotes(data);
+    // const fetchNotes = async () => {
+    //     const { data } = await axios.get('/api/notes');
+    //     setNotes(data);
 
-    }
+    // }
     useEffect(() => {
-        fetchNotes();
-    }, [])
+        dispatch(listNotes());
+        if (!userInfo) {
+            navigate("/");
+        }
+    }, [dispatch, navigate, userInfo, successCreate, successUpdate, successDelete])
 
 
 
     return (
-        <MainScreen title="Welcome Back Kanuri...">
-            <Link to='createnote'>
+        <MainScreen title={`Welcome Back ${userInfo.name}...`}>
+            <Link to='/createnote'>
                 <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
                     Create New Note
                 </Button>
             </Link>
-
+            {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+            {loading && <Loading />}
             {
-                notes.map((note) => (
+                notes?.reverse().filter(filteredote => (
+                    filteredote.title.toLowerCase().includes(search.toLowerCase())
+                )).map((note) => (
                     <Accordion key={note._id}>
-                        {/* <Accordion.Item eventKey="0"> */}
                         <Card >
-                            {/* <Accordion.Header as={Card.Text} variant="link" eventKey="0" > */}
 
                             <Card.Header style={{ display: "flex", width: "100%" }}>
 
@@ -91,7 +120,8 @@ const MyNotes = () => {
                                             {note.content}
                                         </p>
                                         <footer className="blockquote-footer">
-                                            Created on - date
+                                            Created on -{" "}
+                                            <cite title="Source Title">{note.createdAt.substring(0, 10)}</cite>
                                         </footer>
                                     </blockquote>
                                 </Card.Body>
