@@ -1,8 +1,8 @@
 const express = require("express");
-const notes = require("./data/notes");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db.js");
 const userRoutes= require("./routes/userRoutes");
+const noteRoutes= require("./routes/noteRoutes");
 const { notFound, errorHandler } = require("./middlewear/errorMiddlewear");
 
 
@@ -17,12 +17,13 @@ app.get('/',(req,res)=>{
 })
 
 
-app.get('/api/notes',(req,res)=>{
-    res.json(notes);
-})
+// app.get('/api/notes',(req,res)=>{
+//     res.json(notes);
+// })
 
 
-app.use('/api/users',userRoutes)
+app.use('/api/users',userRoutes);
+app.use('/api/notes',noteRoutes);
 
 
 // app.get('/api/notes/:id',(req,res)=>{
