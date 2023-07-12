@@ -8,10 +8,8 @@ This repository contains the source code and resources for the NoteZipper web ap
 ## Table of Contents
 
 - [Installation](#installation)
-- [Usage](#usage)
+- [Screenshots](#screenshots)
 - [Features](#features)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 
