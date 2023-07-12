@@ -25,23 +25,33 @@ To install and run NoteZipper locally, follow these steps:
    cd NoteZipper
    ```
 3. Install the necessary dependencies:
-   ```npm install```
+   ```
+   npm install
+   ```
 
 4. Set up the required environment variables PORT, MONGO_URI, NODE_ENV, JWT_SECRET
    
 5. Start the development server:
-   ```node server.js```
+   ```
+   node server.js
+   ```
 
 6. Navigate to the frontend directory:
-   ``` cd frontend ```
+   ``` 
+   cd frontend 
+   ```
 
 7. Install the necessary dependencies for frontend application:
-   ```npm install```
+   ```
+   npm install
+   ```
 
-8. Start the development server: 
-   ```npm start```
+9. Start the development server: 
+   ```
+   npm start
+   ```
 
-9. Open your web browser and access NoteZipper at `http://localhost:3000`.
+11. Open your web browser and access NoteZipper at `http://localhost:3000`.
 
 
 ## Features
