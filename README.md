@@ -16,30 +16,32 @@ This repository contains the source code and resources for the NoteZipper web ap
 To install and run NoteZipper locally, follow these steps:
 
 1. Clone this repository to your local machine using the command:
+   ```
    git clone https://github.com/Sai-Kumar-Kanuri/NoteZipper.git
+   ```
    
-2. Navigate to the project directory:
+3. Navigate to the project directory:
    ```
    cd NoteZipper
    ```
-3. Install the necessary dependencies:
+4. Install the necessary dependencies:
    ```
    npm install
    ```
 
-4. Set up the required environment variables PORT, MONGO_URI, NODE_ENV, JWT_SECRET
+5. Set up the required environment variables PORT, MONGO_URI, NODE_ENV, JWT_SECRET
    
-5. Start the development server:
+6. Start the development server:
    ```
    node server.js
    ```
 
-6. Navigate to the frontend directory:
+7. Navigate to the frontend directory:
    ``` 
    cd frontend 
    ```
 
-7. Install the necessary dependencies for frontend application:
+8. Install the necessary dependencies for frontend application:
    ```
    npm install
    ```
